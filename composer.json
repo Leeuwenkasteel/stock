@@ -1,0 +1,31 @@
+{
+    "name": "leeuwenkasteel/stock",
+    "description": "add stock to webshop",
+    "type": "library",
+    "license": "MIT",
+    "version" : "1.0",
+    "authors": [
+      {
+        "role": "Developer",
+        "name": "Sanne van Leeuwen",
+        "email": "sanne@leeuwenkasteel.nl",
+        "homepage": "https://www.leeuwenkasteel.nl/"
+      }
+    ],
+	"autoload": {
+        "psr-4": {
+            "Leeuwenkasteel\\Stock\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+	"extra": {
+        "laravel": {
+			"providers": [
+				"Leeuwenkasteel\\Stock\\StockPackageServiceProvider"
+			]
+			
+		}
+	}
+       
+}
