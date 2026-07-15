@@ -28,10 +28,39 @@
 
             {{-- Controls --}}
             <div class="d-flex justify-content-center gap-2 mt-3">
-                <button class="btn btn-sm btn-primary" onclick="startScanner()">▶ Start</button>
-                <button class="btn btn-sm btn-warning" onclick="restartScanner()">🔄 Refresh</button>
-                <button class="btn btn-sm btn-danger" onclick="stopScanner()">⛔ Stop</button>
+                <button class="btn btn-sm btn-outline-primary" onclick="startScanner()"><i class="bi bi-play-fill"></i> Start</button>
+                <button class="btn btn-sm btn-outline-warning" onclick="restartScanner()"><i class="bi bi-repeat"></i> Refresh</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="stopScanner()"><i class="bi bi-sign-stop"></i> Stop</button>
             </div>
+			</div>
+			</div>
+			<div class="card shadow-sm mt-1">
+    <div class="card-body">
+
+        <div class="small text-muted text-center">
+            Handmatig toevoegen:
+        </div>
+
+        <div class="input-group mt-1">
+            <input 
+                type="number" 
+                class="form-control form-control-sm" 
+                wire:model="add"
+            >
+
+            <button 
+                class="btn btn-primary btn-sm"
+                wire:click="handleBarcode"
+                type="button"
+            >
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+			<div class="card shadow-sm mt-1">
+        <div class="card-body">
 
             {{-- Result --}}
             <div class="mt-3 text-center">
@@ -40,38 +69,32 @@
                     {{ $barcode ?: 'Nog niets gescand' }}
                 </div>
             </div>
+			</div>
+			</div>
 
             {{-- Items --}}
-            <div class="mt-4">
+            <div >
 
                 @foreach($table as $t)
-                    <div class="card mb-2 shadow-sm" wire:key="stock-{{ $t->id }}">
+                    <div class="card mb-2 shadow-sm mt-1" wire:key="stock-{{ $t->id }}">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-between small text-muted">
                                 <span>#{{ $t->product->nr }}</span>
-                                <span>Stock: {{ $t->product->stock }}</span>
                                 <span>€ {{ $t->product->price }}</span>
+								<div class="text-end">
+								<button
+									class="btn btn-sm btn-outline-danger"
+									wire:click="delete({{ $t->id }})"
+								>
+									<i class="bi bi-trash"></i>
+								</button>
+							</div>
                             </div>
 
                             {{-- Titel --}}
-                            <label class="form-label small mt-2">Titel</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{ $t->product->translations->title }}"
-                                wire:change="updateTitle({{ $t->id }}, $event.target.value)"
-                            />
-
-                            {{-- Stock --}}
-                            <div class="d-flex justify-content-between mt-3">
-                                <span class="small text-muted">Aantal in stock</span>
-                                <input type="number"
-                                       class="form-control form-control-sm text-center"
-                                       style="width:90px;"
-                                       value="{{ $t->quantity }}"
-                                       wire:change="updateQuantity({{ $t->id }}, $event.target.value)" />
-                            </div>
+                            <label class="form-label small mt-2 fw-bold">Titel:</label>
+							<small>{{ $t->product->translations->title }}</small>
 
                             {{-- Print --}}
                             <div class="d-flex justify-content-between mt-3">
@@ -79,35 +102,21 @@
                                 <input type="number"
                                        class="form-control form-control-sm text-center"
                                        style="width:90px;"
-                                       value="{{ $t->print }}"
-                                       wire:change="updatePrint({{ $t->id }}, $event.target.value)" />
+                                       value="{{ $t->quantity }}"
+                                       wire:change="updateQuantity({{ $t->id }}, $event.target.value)" />
                             </div>
-
-                            {{-- Label only --}}
-                            <div class="d-flex justify-content-between mt-3">
-                                <span class="small text-muted">Alleen label</span>
-                                <input type="checkbox"
-                                       wire:change="toggleLabelOnly({{ $t->id }}, $event.target.checked)"
-                                       @checked($t->labelOnly) />
-                            </div>
-							<div class="mt-3 text-end">
-								<button
-									class="btn btn-sm btn-outline-danger"
-									wire:click="delete({{ $t->id }})"
-								>
-									🗑 Verwijderen
-								</button>
-							</div>
-
                         </div>
                     </div>
                 @endforeach
 
             </div>
-
-        </div>
-    </div>
-
+			@if($table->count() > 0)
+			<div class="card shadow-sm mt-1">
+			<div class="card-body">
+				<button class="btn btn-outline-primary btn-sm w-100" onclick="confirmPrintLabels()">Print Labels</button>
+			</div>
+			</div>
+			@endif
 </div>
 
 @pushonce('scripts')
@@ -194,7 +203,27 @@ document.addEventListener('livewire:init', () => {
         });
 
     });
+	
+
 
 });
+	function confirmPrintLabels() {
+
+    Swal.fire({
+        title: 'Labels printen?',
+        text: 'Weet je zeker dat je de labels wilt afdrukken?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ja, printen',
+        cancelButtonText: 'Annuleren'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            Livewire.dispatch('printLabels');
+        }
+
+    });
+
+}
 </script>
 @endpushonce

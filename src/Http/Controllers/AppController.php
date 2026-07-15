@@ -17,8 +17,8 @@ class AppController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:stock.index', only: ['index']),
-			new Middleware('pauth', except: ['index', 'login', 'loginScan']),
+            //new Middleware('permission:stock.index', only: ['index']),
+			//new Middleware('app.auth:stock', except: ['index', 'login']),
         ];
     }
     public function index(){
@@ -28,6 +28,14 @@ class AppController extends Controller implements HasMiddleware
     }
 	
 	public function login(){
+		return view('stock::login');
+	}
+	
+	public function home(){
+		return view('stock::home');
+	}
+	
+	public function scan(){
 		return view('stock::scan');
 	}
 	

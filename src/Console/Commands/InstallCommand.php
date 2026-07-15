@@ -13,7 +13,7 @@ class InstallCommand extends Command{
     public function handle(){
 		
 		Artisan::call('template:app', [
-            'path' => 'stock.install',
+            'path' => 'stocks.install',
             'title' => 'Stock',
             'permissions' => 'stock',
 			'img' => 'vendor/stock/img/icons/stock-512.png',

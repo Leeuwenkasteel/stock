@@ -4,55 +4,150 @@
 <head>
     <meta charset="utf-8">
 
-    {{-- 📱 MOBILE FIX (belangrijk voor camera/scanner) --}}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ env('APP_NAME') }}</title>
+
+    <title>Stock</title>
 
     {{-- Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     {{-- Icons --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-    <link rel="stylesheet" href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css">
-    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
-    {{-- Styles --}}
+    @livewireStyles
+
     <style>
-        body, html { height:100%; margin:0; }
-        header { height:60px; line-height:60px; }
-        .product-btn { min-height:90px; font-size:1.1rem; }
-        .action-grid button { min-height:80px; font-size:1rem; }
+        body {
+            background: #f1f5f9;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .stock-header {
+            height: 64px;
+            background: #198754;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
+
+        .stock-header .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .stock-header i {
+            font-size: 1.6rem;
+            margin-right: 10px;
+        }
+
+
+        .stock-container {
+            padding: 15px;
+        }
+
+
+        .stock-card {
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.08);
+        }
+
+
+        .product-btn {
+            min-height: 100px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+
+        .action-btn {
+            min-height: 75px;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+
+        .stock-footer {
+            position: fixed;
+            bottom: 0;
+            left:0;
+            right:0;
+            height:55px;
+            background:white;
+            border-top:1px solid #ddd;
+            display:flex;
+            justify-content:space-around;
+            align-items:center;
+        }
+
+        .stock-footer a {
+            color:#198754;
+            text-decoration:none;
+            font-size:.85rem;
+        }
+
+        .stock-footer i {
+            display:block;
+            text-align:center;
+            font-size:1.3rem;
+        }
+
     </style>
 
     @stack('styles')
 
-    {{-- Livewire styles (BELANGRIJK) --}}
-    @livewireStyles
 </head>
+
 
 <body>
 
-<div class="container mt-5">
+
+<header class="stock-header">
+
+    <i class="bi bi-box-seam"></i>
+
+    <div class="logo">
+        Stock
+    </div>
+
+</header>
+
+
+<div class="stock-container mb-5">
+
     {{ $slot }}
+
 </div>
 
-{{-- jQuery (alleen nodig als je het echt gebruikt) --}}
+
+<footer class="stock-footer">
+
+    <a href="{{route('stock.home')}}">
+        <i class="bi bi-house"></i>
+        Home
+    </a>
+
+    <a href="/stock/app/products">
+        <i class="bi bi-boxes"></i>
+        Producten
+    </a>
+</footer>
+
+
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
-{{-- SweetAlert --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-{{-- Bootstrap JS --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-{{-- Livewire scripts (BELANGRIJK voor scanner) --}}
 @livewireScripts
 
-{{-- Scripts stack (barcode scanner etc.) --}}
 @stack('scripts')
+
 
 </body>
 </html>

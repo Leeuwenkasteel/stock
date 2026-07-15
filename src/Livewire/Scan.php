@@ -5,13 +5,15 @@ namespace Leeuwenkasteel\Stock\Livewire;
 use Livewire\Component;
 use Leeuwenkasteel\Webshop\Models\Product;
 use Leeuwenkasteel\Webshop\Models\Stock;
+use Leeuwenkasteel\Cashdesk\Models\Labels;
 
 class Scan extends Component
 {
     public $barcode = '';
     public $table = [];
+	public $add;
 
-    protected $listeners = ['barcodeScanned' => 'handleBarcode'];
+    protected $listeners = ['barcodeScanned' => 'handleBarcode', 'printLabels' => 'printLabels'];
 
     public function mount()
     {
@@ -25,56 +27,55 @@ class Scan extends Component
             ->get();
     }
 
-    public function handleBarcode($code)
+    public function handleBarcode($code = null)
     {
-        $this->barcode = $code;
+        $this->barcode = $code ?? $this->add;
 
-        $product = Product::where('nr', $code)->first();
+        $product = Product::with('translations')->where('nr', $this->barcode)->first();
 
         if (!$product) {
 			$this->dispatch('productNotFound', code: $code);
 			return;
 		}
-
-        $stock = Stock::firstOrCreate(
-            ['product_id' => $product->id],
-            ['quantity' => 0]
-        );
-
-        $stock->increment('quantity');
-
-        // 🔥 snel refresh (simpel en stabiel)
+		$find = Stock::whereProductId($product->id)->first();
+		if($find){
+			$find->update(['quantity' => $find->quantity+1]);
+		}else{
+			$new = new Stock();
+			$new->product_id = $product->id;
+			$new->quantity = 1;
+			$new->labelOnly = 1;
+			$new->save();
+		}
+		$this->add = '';
         $this->loadTable();
     }
 
-    public function updateTitle($id, $title)
-    {
-        $stock = Stock::findOrFail($id);
-        $stock->product->translations()->update(['title' => $title]);
-    }
-
-    public function updateQuantity($id, $qty)
-    {
+    public function updateQuantity($id, $qty){
         Stock::where('id', $id)->update(['quantity' => (int)$qty]);
         $this->loadTable();
     }
 
-    public function updatePrint($id, $qty)
-    {
-        Stock::where('id', $id)->update(['print' => (int)$qty]);
-    }
-
-    public function toggleLabelOnly($id, $val)
-    {
-        Stock::where('id', $id)->update(['labelOnly' => (bool)$val]);
-    }
 	
-	public function delete($id)
-{
-    Stock::where('id', $id)->delete();
+	public function delete($id){
+		Stock::where('id', $id)->delete();
 
-    $this->loadTable();
-}
+		$this->loadTable();
+	}
+	
+	public function printLabels(){
+		foreach(Stock::all() as $i){
+			$product = Product::find($i->product_id);
+
+			$t = new Labels();
+			$t->product_id = $i->product_id;
+			$t->amount = $i->quantity;
+			$t->save();
+			
+			$i->delete();
+		}
+		$this->loadTable();
+	}
 
     public function render()
     {

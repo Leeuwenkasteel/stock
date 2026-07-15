@@ -43,6 +43,7 @@ class StockPackageServiceProvider extends ServiceProvider{
       ]);
     }
 	Livewire::component('stock::scan', Scan::class);
+	
 	Blade::component('stock::layout', StockComponent::class);
 	
   }
