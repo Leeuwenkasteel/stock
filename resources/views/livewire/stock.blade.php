@@ -1,7 +1,7 @@
 <div class="container py-3">
-<div class="card shadow-sm">
+	<div class="card shadow-sm">
         <div class="card-body h6 text-center">
-			Labels printen
+			Voorraad updaten
 		</div>
 	</div>
     <div class="card shadow-sm mt-1">
@@ -102,11 +102,11 @@
 
                             {{-- Print --}}
                             <div class="d-flex justify-content-between mt-3">
-                                <span class="small text-muted">Labels printen</span>
+                                <span class="small text-muted">Aantal</span>
                                 <input type="number"
                                        class="form-control form-control-sm text-center"
                                        style="width:90px;"
-                                       value="{{ $t->label }}"
+                                       value="{{ $t->quantity }}"
                                        wire:change="updateQuantity({{ $t->id }}, $event.target.value)" />
                             </div>
                         </div>
@@ -117,7 +117,7 @@
 			@if($table->count() > 0)
 			<div class="card shadow-sm mt-1">
 			<div class="card-body">
-				<button class="btn btn-outline-primary btn-sm w-100" onclick="confirmPrintLabels()">Print Labels</button>
+				<button class="btn btn-outline-primary btn-sm w-100" onclick="confirmPrintLabels()">Bijwerken</button>
 			</div>
 			</div>
 			@endif
@@ -207,23 +207,20 @@ document.addEventListener('livewire:init', () => {
         });
 
     });
-	
-
-
 });
-	function confirmPrintLabels() {
+function confirmPrintLabels() {
 
     Swal.fire({
-        title: 'Labels printen?',
-        text: 'Weet je zeker dat je de labels wilt afdrukken?',
+        title: 'Bijwerken?',
+        text: 'Weet je zeker dat je de voorraad wil bijwerken?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Ja, printen',
+        confirmButtonText: 'Ja, bijwerken',
         cancelButtonText: 'Annuleren'
     }).then((result) => {
 
         if (result.isConfirmed) {
-            Livewire.dispatch('printLabels');
+            Livewire.dispatch('updateQnt');
         }
 
     });

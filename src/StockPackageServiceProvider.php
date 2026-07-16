@@ -8,6 +8,7 @@ use Leeuwenkasteel\Stock\View\Components\StockComponent;
 use Illuminate\Support\Facades\Blade;
 
 use Leeuwenkasteel\Stock\Livewire\Scan;
+use Leeuwenkasteel\Stock\Livewire\Stock;
 
 use Livewire;
 
@@ -43,6 +44,7 @@ class StockPackageServiceProvider extends ServiceProvider{
       ]);
     }
 	Livewire::component('stock::scan', Scan::class);
+	Livewire::component('stock::stock', Stock::class);
 	
 	Blade::component('stock::layout', StockComponent::class);
 	

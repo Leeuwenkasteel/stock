@@ -15,7 +15,8 @@
 
     {{-- Icons --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-
+	<link rel="stylesheet" href="{{asset('css/style.css')}}"></link>
+		<link rel="stylesheet" href="{{asset('css/custom.css')}}"></link>
     @livewireStyles
 
     <style>
@@ -41,7 +42,6 @@
 
         .stock-header i {
             font-size: 1.6rem;
-            margin-right: 10px;
         }
 
 
@@ -110,11 +110,15 @@
 
 <header class="stock-header">
 
-    <i class="bi bi-box-seam"></i>
+    <div class="d-flex align-items-center">
+        <i class="bi bi-box-seam me-2"></i>
 
-    <div class="logo">
-        Stock
+        <div class="logo">
+            Stock
+        </div>
     </div>
+
+
 
 </header>
 
@@ -125,18 +129,30 @@
 
 </div>
 
-
 <footer class="stock-footer">
 
     <a href="{{route('stock.home')}}">
         <i class="bi bi-house"></i>
         Home
     </a>
-
-    <a href="/stock/app/products">
+	<a href="{{route('stock.st')}}">
+        <i class="bi bi-box-arrow-in-down"></i>
+        Voorraad
+    </a>
+    <a href="{{route('stock.scan')}}">
+        <i class="bi bi-printer"></i>
+        Labels
+    </a>
+	
+	<!--<a href="/stock/app/products">
         <i class="bi bi-boxes"></i>
         Producten
+    </a>-->
+	<a href="/stock/app/logout">
+        <i class="bi bi-power"></i>
+        Uitloggen
     </a>
+
 </footer>
 
 

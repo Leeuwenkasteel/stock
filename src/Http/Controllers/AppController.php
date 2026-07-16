@@ -39,4 +39,16 @@ class AppController extends Controller implements HasMiddleware
 		return view('stock::scan');
 	}
 	
+	public function stck(){
+		return view('stock::stock');
+	}
+	
+	public function logout()
+	{
+		setcookie('login_stock', '', time() - 3600, '/stock/app');
+		setcookie('login_stock_user', '', time() - 3600, '/stock/app');
+
+		return redirect()->route('stock.login');
+	}
+	
 }

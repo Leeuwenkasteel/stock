@@ -11,6 +11,8 @@ use Leeuwenkasteel\Stock\Http\Controllers\AppController;
 		Route::middleware('app.auth:stock')->group(function () {
 			Route::get('home', [AppController::class, 'home'])->name('stock.home');
 			Route::get('scan', [AppController::class, 'scan'])->name('stock.scan');
+			Route::get('st', [AppController::class, 'stck'])->name('stock.st');
+			Route::get('logout', [AppController::class, 'logout'])->name('stock.logout');
 		});
 	});
 	
