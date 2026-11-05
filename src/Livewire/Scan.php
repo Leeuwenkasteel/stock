@@ -32,12 +32,15 @@ class Scan extends Component
     {
         $this->barcode = $code ?? $this->add;
 
-        $product = Product::with('translations')->where('nr', $this->barcode)->first();
+		$count = Product::whereNr($this->barcode)->count();
+        $product = Product::whereNr($this->barcode)->first();
+        
+        if ($count == 0) {
 
-        if (!$product) {
 			$this->dispatch('productNotFound', code: $code);
 			return;
 		}
+
 		$find = Stock::whereProductId($product->id)->whereNotNull('label')->first();
 		if($find){
 			$find->update(['label' => $find->label+1]);
@@ -49,6 +52,7 @@ class Scan extends Component
 			$new->save();
 		}
 		$this->add = '';
+		$this->barcode = '';
         $this->loadTable();
     }
 

@@ -47,7 +47,7 @@
 
         <div class="input-group mt-1">
             <input 
-                type="number" 
+                type="text" 
                 class="form-control form-control-sm" 
                 wire:model="add"
             >
